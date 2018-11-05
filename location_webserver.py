@@ -38,6 +38,24 @@ def get_location():
  	)
 
 
+@app.route("/orientation")
+def get_orientation():
+
+	droid.startSensingTimed(1, 100)
+	sensor_result = droid.sensorsReadOrientation().result #azimuth (z), pitch (x), roll (y)
+	droid.stopSensing()
+
+	response.content_type = "application/json"
+
+	return json.dumps(
+		{
+			"azimuth": sensor_result[0],
+			"pitch": sensor_result[1],
+			"roll": sensor_result[2]
+		}, indent=4
+	)
+
+
 if __name__ == "__main__":
 
 	run(app, host=localhost, port=8080)
